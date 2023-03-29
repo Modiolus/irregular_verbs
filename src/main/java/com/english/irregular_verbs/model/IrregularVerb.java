@@ -12,7 +12,7 @@ public class IrregularVerb {
 
     private String infinitive;
     private String pastIndefinite;
-    private String pstParticiple;
+    private String pastParticiple;
     private String translate;
 
     public IrregularVerb() {
@@ -42,12 +42,12 @@ public class IrregularVerb {
         this.pastIndefinite = pastIndefinite;
     }
 
-    public String getPstParticiple() {
-        return pstParticiple;
+    public String getPastParticiple() {
+        return pastParticiple;
     }
 
-    public void setPstParticiple(String pstParticiple) {
-        this.pstParticiple = pstParticiple;
+    public void setPastParticiple(String pastParticiple) {
+        this.pastParticiple = pastParticiple;
     }
 
     public String getTranslate() {
@@ -56,5 +56,16 @@ public class IrregularVerb {
 
     public void setTranslate(String translate) {
         this.translate = translate;
+    }
+
+    @Override
+    public String toString() {
+        return "IrregularVerb{" +
+                "id=" + id +
+                ", infinitive='" + infinitive + '\'' +
+                ", pastIndefinite='" + pastIndefinite + '\'' +
+                ", pastParticiple='" + pastParticiple + '\'' +
+                ", translate='" + translate + '\'' +
+                '}';
     }
 }
