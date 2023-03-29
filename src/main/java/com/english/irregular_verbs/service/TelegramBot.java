@@ -62,60 +62,52 @@ public class TelegramBot extends TelegramLongPollingBot {
             long chatId = update.getMessage().getChatId();
             var verbs = irregularVerbRepository.findAll();
             var users = userRepository.findAll();
+
+            searchVerb(verbs, messageText, chatId);
 //            String[] ex = (String[]) verbs.stream()
 //                    .filter(element -> element.getPastIndefinite().split("[\\s,]+").equals(messageText.toLowerCase()))
 //                    .toArray();
-            for (IrregularVerb verb : verbs) {
-                System.out.println(verb);
-                String[] infinitiveArray = verb.getInfinitive().split(" ");
-
-                String[] pastIndefiniteArray = verb.getPastIndefinite().split("[\\s,]+");
-//                String[] pastIndefiniteArray = verb.getPastIndefinite().split(" ");
-
-                String[] pastParticipleArray = verb.getPastParticiple().split("[\\s,]+");
-//                String[] pastParticipleArray = verb.getPastParticiple().split(" ");
-//                System.out.println("LENGTH -->> "+pastIndefiniteArray.length);
-
-                if (messageText.toLowerCase().equals(infinitiveArray[0])
-                        || messageText.toLowerCase().equals(pastIndefiniteArray[0])
-                        || messageText.toLowerCase().equals(pastIndefiniteArray[pastIndefiniteArray.length-2])
-                        || messageText.toLowerCase().equals(pastParticipleArray[0])
-                        || messageText.toLowerCase().equals(pastParticipleArray[pastParticipleArray.length-2])
-                ) {
-
-                    System.out.println(verb);
-                    prepareAndSendMessage(chatId, "V1: " + verb.getInfinitive() + "\n"
-                            + "V2: " + verb.getPastIndefinite() + "\n" + "V3: " + verb.getPastParticiple() + "\n"
-                            + "Translate: " + verb.getTranslate());
-
-                }
-//                else if (true) {
-//                    prepareAndSendMessage(chatId, "Sorry, this verb isn't irregular");
 //
+//                switch (messageText) {
+//                    case "/start":
+//                        registerUser(update.getMessage());
+//                        startCommandReceived(chatId, update.getMessage().getChat().getFirstName());
+//                        break;
+////                        default:
+////                            prepareAndSendMessage(chatId, "Sorry, command was not recognized");
 //                }
-//                else if (update.hasMessage()) {  //???
-//                    SendMessage.builder()
-//                            .chatId(update.getMessage().getFrom().getId())
-//                            .text(irregularVerbRepository.findAll().toString());
 //            }
-//                else if () {
-//
-//                }
-                else {
-//                    prepareAndSendMessage(chatId, "Sorry, this verb isn't irregular");
-//                    break;
-                    switch (messageText) {
-                        case "/start":
-                            registerUser(update.getMessage());
-                            startCommandReceived(chatId, update.getMessage().getChat().getFirstName());
-                            break;
-//                        default:
-//                            prepareAndSendMessage(chatId, "Sorry, command was not recognized");
-                    }
-                }
+//        }
+
+
+        }
+
+    }
+
+    private void searchVerb(List<IrregularVerb> verbs, String messageText, long chatId) {
+        boolean flag = false;
+        for (IrregularVerb verb : verbs) {
+
+            String[] infinitiveArray = verb.getInfinitive().split(" ");
+            String[] pastIndefiniteArray = verb.getPastIndefinite().split("[\\s,]+");
+            String[] pastParticipleArray = verb.getPastParticiple().split("[\\s,]+");
+
+            if (messageText.toLowerCase().equals(infinitiveArray[0])
+                    || messageText.toLowerCase().equals(pastIndefiniteArray[0])
+                    || messageText.toLowerCase().equals(pastIndefiniteArray[pastIndefiniteArray.length - 2])
+                    || messageText.toLowerCase().equals(pastParticipleArray[0])
+                    || messageText.toLowerCase().equals(pastParticipleArray[pastParticipleArray.length - 2])) {
+                flag = true;
+                prepareAndSendMessage(chatId, "\uD83D\uDCCC " + verb.getInfinitive() + "\n"
+                        + "\uD83D\uDCCC " + verb.getPastIndefinite() + "\n" + "\uD83D\uDCCC " + verb.getPastParticiple() + "\n"
+                        + "✅ " + verb.getTranslate());
             }
 
         }
+        if (!flag) {
+            prepareAndSendMessage(chatId, "❗Sorry, this verb isn't irregular");
+        }
+
 
     }
 
