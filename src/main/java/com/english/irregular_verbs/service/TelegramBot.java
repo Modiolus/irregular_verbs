@@ -28,7 +28,6 @@ import java.util.*;
 @Component
 public class TelegramBot extends TelegramLongPollingBot implements BotVerbs {
 
-    //    static final String REVIEW_BUTTON = "REVIEW_BUTTON";
     private static final Logger loggerError = LoggerFactory.getLogger("logger.error");
     private static final Logger loggerInfo = LoggerFactory.getLogger("logger.info");
     static final String ERROR_TEXT = "Error occurred: ";
@@ -144,7 +143,7 @@ public class TelegramBot extends TelegramLongPollingBot implements BotVerbs {
 
         var donateButton = new InlineKeyboardButton();
         donateButton.setText("Відправити донат");
-        donateButton.setUrl("https://send.monobank.ua/jar/32qKR5ZGmm");
+        donateButton.setUrl("https://send.monobank.ua/5Vu9UDWJTC");
 
         rowInline.add(donateButton);
         rowsInline.add(rowInline);
