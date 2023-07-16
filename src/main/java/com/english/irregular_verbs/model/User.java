@@ -17,6 +17,7 @@ public class User {
     private String lastName;
     private String userName;
     private Timestamp registeredAt;
+    private Integer groupIndicator;
 
     public User() {
     }
@@ -59,5 +60,13 @@ public class User {
 
     public void setRegisteredAt(Timestamp registeredAt) {
         this.registeredAt = registeredAt;
+    }
+
+    public Integer getGroupIndicator() {
+        return groupIndicator;
+    }
+
+    public void setGroupIndicator(Integer groupIndicator) {
+        this.groupIndicator = groupIndicator;
     }
 }

@@ -1,12 +1,14 @@
 package com.english.irregular_verbs.model;
 
+import com.english.irregular_verbs.repositories.IrregularVerbRepository;
+
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.Table;
 
 @Entity
-@Table(name = "irregularverb", schema = "english")
-public class IrregularVerb {
+@Table(name = "verbgroup1", schema = "english")
+public class VerbGroup1 {
     @Id
     private int id;
     private String infinitive;
@@ -14,7 +16,7 @@ public class IrregularVerb {
     private String pastParticiple;
     private String translate;
 
-    public IrregularVerb() {
+    public VerbGroup1() {
     }
 
     public int getId() {

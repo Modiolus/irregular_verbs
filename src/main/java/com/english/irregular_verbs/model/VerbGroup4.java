@@ -5,8 +5,8 @@ import javax.persistence.Id;
 import javax.persistence.Table;
 
 @Entity
-@Table(name = "irregularverb", schema = "english")
-public class IrregularVerb {
+@Table(name = "verbgroup4", schema = "english")
+public class VerbGroup4 {
     @Id
     private int id;
     private String infinitive;
@@ -14,7 +14,7 @@ public class IrregularVerb {
     private String pastParticiple;
     private String translate;
 
-    public IrregularVerb() {
+    public VerbGroup4() {
     }
 
     public int getId() {
