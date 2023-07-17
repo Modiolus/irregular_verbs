@@ -27,12 +27,8 @@ import java.sql.Timestamp;
 import java.util.*;
 
 @Component
-public class TelegramBot extends TelegramLongPollingBot
-//        implements
-//        BotButton,
-//        BotVerbs
-{
-    //    private final Search search;
+public class TelegramBot extends TelegramLongPollingBot {
+
     private static final Logger loggerError = LoggerFactory.getLogger("logger.error");
     private static final Logger loggerInfo = LoggerFactory.getLogger("logger.info");
     static final String ERROR_TEXT = "Error occurred: ";
@@ -46,13 +42,6 @@ public class TelegramBot extends TelegramLongPollingBot
     private final VerbGroup6Repository verbGroup6Repository;
     private final BotConfig config;
     List<BotCommand> listOfCommands = new ArrayList<>();
-    List<IrregularVerb> allFormsSame = new ArrayList<>();
-    List<IrregularVerb> firstEqualsThird = new ArrayList<>();
-    List<IrregularVerb> secondEqualsThird = new ArrayList<>();
-    List<IrregularVerb> group = new ArrayList<>();
-    //    Optional<String> randomTranslate = Optional.ofNullable(null);
-    String randomTranslate;
-    //    IrregularVerb randomVerb;
     Optional<VerbGroup1> randomVerbGroup1;
     Optional<VerbGroup2> randomVerbGroup2;
     Optional<VerbGroup3> randomVerbGroup3;
@@ -85,7 +74,6 @@ public class TelegramBot extends TelegramLongPollingBot
                        UserRepository userRepository, VerbGroup1Repository verbGroup1Repository, VerbGroup2Repository verbGroup2Repository,
                        VerbGroup3Repository verbGroup3Repository, VerbGroup4Repository verbGroup4Repository,
                        VerbGroup5Repository verbGroup5Repository, VerbGroup6Repository verbGroup6Repository, BotConfig config) {
-//        this.search = search;
         this.irregularVerbRepository = irregularVerbRepository;
         this.userRepository = userRepository;
         this.verbGroup1Repository = verbGroup1Repository;
@@ -123,7 +111,6 @@ public class TelegramBot extends TelegramLongPollingBot
     public void onUpdateReceived(Update update) {
 
         if (update.hasMessage() && update.getMessage().hasText()
-//                && update.getMessage().isCommand()
 
         ) {
             Message message = update.getMessage();
@@ -187,9 +174,7 @@ public class TelegramBot extends TelegramLongPollingBot
                     userRepository.save(user);
                     System.out.println("getUserName из incomingText.equals(\"/group2\"-->> " + userRepository.findById(chatId).get().getUserName());
                 }
-//                else throw new NoSuchElementException();
 
-//                System.out.println("Indicator-->> " + userRepository.findById(chatId).get().getGroupIndicator());
                 var verbs = verbGroup2Repository.findAll();
                 sendVerbsGroup(verbs, chatId);
                 checkKnowledgeAndVerbButton(chatId);
@@ -203,7 +188,7 @@ public class TelegramBot extends TelegramLongPollingBot
                     userRepository.save(user);
                     System.out.println("getUserName из incomingText.equals(\"/group3\"-->> " + userRepository.findById(chatId).get().getUserName());
                 }
-//                else throw new NoSuchElementException();
+
                 var verbs = verbGroup3Repository.findAll();
                 sendVerbsGroup(verbs, chatId);
                 checkKnowledgeAndVerbButton(chatId);
@@ -240,14 +225,11 @@ public class TelegramBot extends TelegramLongPollingBot
                 var verbs = verbGroup6Repository.findAll();
                 sendVerbsGroup(verbs, chatId);
                 checkKnowledgeAndVerbButton(chatId);
-            }
-
-            else if (incomingText.contains("Перевірити дієслово")) {
+            } else if (incomingText.contains("Перевірити дієслово")) {
                 System.out.println("Перевірити дієслово длина -->>" + messageArray.length);
                 deleteMessage(chatId, message.getMessageId());
                 sendMessage(chatId, "Введіть будь-яку форму дієслова одним словом");
 
-//                loggerInfo.info("User " + update.getMessage().getChat().getFirstName() + " found word: " + messageText);
             } else if (messageArray.length == 1 && isEnglishText(incomingText)) {
                 System.out.println("Зашёл в messageArray.length == 1 и searchVerb длина: -->" + messageArray.length);
                 var verbs = irregularVerbRepository.findAll();
@@ -258,11 +240,7 @@ public class TelegramBot extends TelegramLongPollingBot
 
                 loggerInfo.info("User " + update.getMessage().getChat().getFirstName() + " found word: " + incomingText);
 
-            } else
-//                if (messageArray.length == 3 && isEnglishText(incomingText))
-                { // TODO: 27.05.2023 возможно здесь будет смысл проверить messageArray.length == 3 && isEnglishText(incomingText)
-                System.out.println("Зашёл в messageArray.length else и compareWithRandom");
-
+            } else {
 
                 Optional<User> optionalUser = userRepository.findById(chatId);
                 if (optionalUser.isPresent()) {
@@ -278,10 +256,9 @@ public class TelegramBot extends TelegramLongPollingBot
                             System.out.println("verbGroup2 из messageArray.length else и compareWithRandom-->> " + randomVerbGroup2);
                             break;
                         case 3:
-                            if (randomVerbGroup3.isPresent()){
+                            if (randomVerbGroup3.isPresent()) {
                                 compareWithGroup3(chatId, message, randomVerbGroup3);
-                            }
-                               else throw new NoSuchElementException("EXEPTION");
+                            } else throw new NoSuchElementException("EXEPTION");
                             break;
                         case 4:
                             compareWithGroup4(chatId, message, randomVerbGroup4);
@@ -341,7 +318,8 @@ public class TelegramBot extends TelegramLongPollingBot
                 if (randomVerbGroup1.isPresent()) {
                     randomTranslate = randomVerbGroup1.get().getTranslate();
                     sendMessage(chatId, randomTranslate);
-                } else sendMessage(chatId, "Натисніть кнопку \"Перевірити знання\""); // TODO: 16.07.2023 нужна ли эта строка - не работает
+                } else
+                    sendMessage(chatId, "Натисніть кнопку \"Перевірити знання\""); // TODO: 16.07.2023 нужна ли эта строка - не работает
                 break;
             case 2:
                 range = verbGroup2Repository.count();
@@ -402,10 +380,9 @@ public class TelegramBot extends TelegramLongPollingBot
     }
 
     public void compareWithGroup1(long chatId, Message message, Optional<VerbGroup1> randomVerbGroup1) {
-        // TODO: 29.05.2023 РЕализуем метод сравнения для первой группы
+
         String[] userAnswer = message.getText().toLowerCase().split("[\\s,]+");
-        System.out.println("Array после сплита -->> " + Arrays.toString(userAnswer));
-        System.out.println("рандомный глагол из метода compareWithGroup1 -->> " + randomVerbGroup1);
+
         if (randomVerbGroup1.isPresent()) {
             String[] infinitiveArray = randomVerbGroup1.get().getInfinitive().split(" ");
             String[] pastIndefiniteArray = randomVerbGroup1.get().getPastIndefinite().split("[\\s,]+");
@@ -441,22 +418,19 @@ public class TelegramBot extends TelegramLongPollingBot
                 checkKnowledgeAndVerbButton(chatId);
             } else sendMessage(chatId, "❗Відповідь неправильна, спробуйте ще раз");
         }
-//                sweat          sweat                            sweat
-//                sweat          sweated                          sweated
-//                sweat [swet] | sweat [swɛt], sweated [swɛtɪd] | sweat [swɛt], sweated ['swɛtɪd]
+
     }
 
     public void compareWithGroup2(long chatId, Message message, Optional<VerbGroup2> randomVerbGroup2) {
 
         String[] userAnswer = message.getText().toLowerCase().split("[\\s,]+");
-        System.out.println("Array после сплита -->> " + Arrays.toString(userAnswer));
-        System.out.println("рандомный глагол из метода compareWithGroup2 -->> " + randomVerbGroup2);
+
         if (randomVerbGroup2.isPresent()) {
 
             String[] infinitiveArray = randomVerbGroup2.get().getInfinitive().split(" ");
             String[] pastIndefiniteArray = randomVerbGroup2.get().getPastIndefinite().split("[\\s,]+");
             String[] pastParticipleArray = randomVerbGroup2.get().getPastParticiple().split("[\\s,]+");
-//           1 и 3 равны
+
             if (userAnswer.length == 3 && !userAnswer[0].equals(userAnswer[1])
                     && userAnswer[0].equals(userAnswer[2])
                     && userAnswer[0].equals(infinitiveArray[0])
@@ -466,23 +440,20 @@ public class TelegramBot extends TelegramLongPollingBot
                 checkKnowledgeAndVerbButton(chatId);
 
             } else sendMessage(chatId, "❗Відповідь неправильна, спробуйте ще раз");
-//        become 	        became 	            become
-//        become [bɪˈkʌm]	became [bɪˈkeɪm]	become [bɪˈkʌm]
-//        groupsAndCheckVerbsButton(chatId);
+
         }
     }
 
     public void compareWithGroup3(long chatId, Message message, Optional<VerbGroup3> randomVerbGroup3) {
 
         String[] userAnswer = message.getText().toLowerCase().split("[\\s,]+");
-        System.out.println("Array после сплита -->> " + Arrays.toString(userAnswer));
 
         if (randomVerbGroup3.isPresent()) {
             System.out.println("рандомный глагол из метода compareWithGroup3 -->> " + randomVerbGroup3);
             String[] infinitiveArray = randomVerbGroup3.get().getInfinitive().split(" ");
             String[] pastIndefiniteArray = randomVerbGroup3.get().getPastIndefinite().split("[\\s,]+");
             String[] pastParticipleArray = randomVerbGroup3.get().getPastParticiple().split("[\\s,]+");
-//          2 и 3 равны
+
             if (userAnswer.length == 3
                     && userAnswer[0].equals(infinitiveArray[0])
                     && userAnswer[1].equals(pastIndefiniteArray[0])
@@ -514,21 +485,17 @@ public class TelegramBot extends TelegramLongPollingBot
                 sendMessage(chatId, "❗Відповідь неправильна, спробуйте ще раз");
         }
 
-
-//        burn [bɜ:n]	  burned [bɜ:nd], burnt [bɜ:nt]	  burned [bɜ:nd], burnt [bɜ:nt]
-//        shave [ʃeɪv]	  shaved [ʃeɪvd]	              shaved [ʃeɪvd], shaven [ʃeɪvən]
     }
 
     public void compareWithGroup4(long chatId, Message message, Optional<VerbGroup4> randomVerbGroup4) {
+
         String[] userAnswer = message.getText().toLowerCase().split("[\\s,]+");
-        System.out.println("Array после сплита -->> " + Arrays.toString(userAnswer));
-        System.out.println("рандомный глагол из метода compareWithGroup4 -->> " + randomVerbGroup4);
 
         if (randomVerbGroup4.isPresent()) {
             String[] infinitiveArray = randomVerbGroup4.get().getInfinitive().split(" ");
             String[] pastIndefiniteArray = randomVerbGroup4.get().getPastIndefinite().split("[\\s,]+");
             String[] pastParticipleArray = randomVerbGroup4.get().getPastParticiple().split("[\\s,]+");
-//            третья форма EN
+
             if (userAnswer.length == 3
                     && userAnswer[0].equals(infinitiveArray[0])
                     && userAnswer[1].equals(pastIndefiniteArray[0])
@@ -559,14 +526,13 @@ public class TelegramBot extends TelegramLongPollingBot
             } else
                 sendMessage(chatId, "❗Відповідь неправильна, спробуйте ще раз");
         }
-//        wake [weɪk]	woke [woʊk], waked [weɪkt]	 woken [woʊkən], waked [weɪkt]
+
     }
 
     public void compareWithGroup5(long chatId, Message message, Optional<VerbGroup5> randomVerbGroup5) {
-        //            третья форма OWN/AWN
+
         String[] userAnswer = message.getText().toLowerCase().split("[\\s,]+");
-        System.out.println("Array после сплита -->> " + Arrays.toString(userAnswer));
-        System.out.println("рандомный глагол из метода compareWithGroup5 -->> " + randomVerbGroup5);
+
         if (randomVerbGroup5.isPresent()) {
             String[] infinitiveArray = randomVerbGroup5.get().getInfinitive().split(" ");
             String[] pastIndefiniteArray = randomVerbGroup5.get().getPastIndefinite().split("[\\s,]+");
@@ -589,13 +555,12 @@ public class TelegramBot extends TelegramLongPollingBot
             } else
                 sendMessage(chatId, "❗Відповідь неправильна, спробуйте ще раз");
         }
-//        blow [bloʊ]	blew [blu:]	       blown [bləʊn], blowed [bloʊd]
+
     }
 
     public void compareWithGroup6(long chatId, Message message, Optional<VerbGroup6> randomVerbGroup6) {
+
         String[] userAnswer = message.getText().toLowerCase().split("[\\s,]+");
-        System.out.println("Array после сплита -->> " + Arrays.toString(userAnswer));
-        System.out.println("рандомный глагол из метода compareWithGroup6 -->> " + randomVerbGroup6);
 
         if (randomVerbGroup6.isPresent()) {
             String[] infinitiveArray = randomVerbGroup6.get().getInfinitive().split(" ");
@@ -628,9 +593,6 @@ public class TelegramBot extends TelegramLongPollingBot
             } else
                 sendMessage(chatId, "❗Відповідь неправильна, спробуйте ще раз");
         }
-//        begin [bɪˈgɪn]	began [bɪˈgæn]	              begun [bɪˈgʌn]
-//        dive [daɪv]	    dove [doʊv], dived [daɪvd]	  dived [daɪvd]
-//        prove [pru:v]	    proved [pru:vd]	              proven [pru:vən], proved [pru:vd]
 
     }
 
@@ -687,8 +649,7 @@ public class TelegramBot extends TelegramLongPollingBot
     public void mainKeyboard(long chatId) {
         SendMessage sendMessage = new SendMessage();
         sendMessage.setChatId(String.valueOf(chatId));
-//        sendMessage.setText("ℹ️ <b>Головне меню \uD83D\uDC47</b>");
-//        sendMessage.setParseMode(ParseMode.HTML);
+
         sendMessage.setText("ℹ️ Що ви хочете зробити?\uD83D\uDE42");
 
         ReplyKeyboardMarkup keyboardMarkup = new ReplyKeyboardMarkup();
